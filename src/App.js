@@ -6,7 +6,7 @@ import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div >
+    <div className="App relative">
       <Header/>
       <Routes>
         <Route path="/" element={<Cards/>}/>
