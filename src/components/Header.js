@@ -5,11 +5,13 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <div className="sticky  top-0 text-3xl flex justify-between items-center text-red-500 font-bold p-3 border-b-2 border-gray-500">
-      <span>
-        Filmy<span className="text-white">World</span>
-      </span>
-      <Link to={'/addmovie'}>
+    <div className="sticky z-10 header top-0 text-3xl flex justify-between items-center text-red-500 font-bold p-3 border-b-2 border-gray-500">
+      <Link to='/'>
+        <span>
+          Filmy<span className="text-white">World</span>
+        </span>
+      </Link>
+      <Link to={"/addmovie"}>
         <h1 className="text-lg flex items-center cursor-pointer">
           <Button>
             <AddIcon className="mr-1" color="success" />{" "}
