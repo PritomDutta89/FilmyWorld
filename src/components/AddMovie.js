@@ -11,6 +11,8 @@ const AddMovie = () => {
     year: "",
     description: "",
     image: "",
+    rated: 0,
+    rating: 0
   });
 
   const [loading, setLoading] = useState(false);
@@ -27,6 +29,14 @@ const AddMovie = () => {
         buttons: false,
         timer: 3000,
       });
+
+      //After adding movie make the form empty
+      setForm({
+        title: "",
+        year: "",
+        description: "",
+        image: "",
+      })
     } catch (err) {
       swal({
         title: err.message,

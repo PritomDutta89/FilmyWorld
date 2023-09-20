@@ -19,6 +19,7 @@ const app = initializeApp(firebaseConfig);
 //here we connect with DB / Firestore
 export const db = getFirestore(app); //here we access the DB
 export const moviesRef = collection(db, "movies"); // here set collection like mongodb, add database, and movies(collection name which I created)
+export const reviewsRef = collection(db, "reviews"); // here set collection for 'reviews', add database
 
 
 export default app;

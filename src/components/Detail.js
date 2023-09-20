@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { ThreeCircles } from "react-loader-spinner";
+import Reviews from "./Reviews";
 
 const Detail = () => {
   const { id } = useParams(); //use object destructure - fetch id from URL
@@ -12,6 +13,8 @@ const Detail = () => {
     year: "",
     image: "",
     description: "",
+    rating: 0,
+    rated: 0
   });
   const [loading, setLoading] = useState(true); //for loading screen
 
@@ -41,8 +44,11 @@ const Detail = () => {
             <h1 className="text-3xl font-bold text-gray-400">
               {data.title} <span className="text-xl">({data.year})</span>
             </h1>
-            <ReactStars size={20} half={true} value={4} edit={false} />
+            <ReactStars size={20} half={true} value={data.rating/data.rated} edit={false} />
+
             <p className="mt-3">{data.description}</p>
+
+            <Reviews id={id} prevRating={data.rating} userRated={data.rated} />
           </div>
         </>
       )}
