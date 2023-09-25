@@ -32,6 +32,7 @@ const Signup = () => {
     });
   }
 
+  //gere request for OTP
   const requestOtp = () => {
       setLoading(true);
       generateRecaptha();
@@ -53,11 +54,12 @@ const Signup = () => {
   }
 
   //here verify the otp
-  const verifyOTP = async () => {
+  const verifyOTP = () => {
     try {
       setLoading(true);
       window.confirmationResult.confirm(OTP).then((result) => {
-        // uploadData();
+        //here store data in DB
+        uploadData();
         swal({
           text: "Sucessfully Registered",
           icon: "success",
@@ -69,22 +71,25 @@ const Signup = () => {
       })
     } catch (error) {
       console.log(error);
+      alert("Please check the OTP again...");
+      setLoading(false);
     }
   }
 
-  // const uploadData = async () => {
-  //   try {
-  //     const salt = bcrypt.genSaltSync(10);
-  //     var hash = bcrypt.hashSync(form.password, salt);
-  //     await addDoc(usersRef, {
-  //       name: form.name,
-  //       password: hash,
-  //       mobile: form.mobile
-  //     });
-  //   } catch(err) {
-  //     console.log(err);
-  //   }
-  // }
+  const uploadData = async () => {
+    try {
+      const salt = bcrypt.genSaltSync(10);
+      var hash = bcrypt.hashSync(form.password, salt); // here convert pass to no-readable hash value
+      //save users login data into DB
+      await addDoc(usersRef, {
+        name: form.name,
+        password: hash,
+        mobile: form.mobile
+      });
+    } catch(err) {
+      console.log(err);
+    }
+  }
 
   return (
     <div className="w-full flex flex-col mt-8 items-center">

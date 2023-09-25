@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { TailSpin } from "react-loader-spinner";
 import { addDoc } from "firebase/firestore";
 import { moviesRef } from "../firebase/firebase";
 import swal from "sweetalert";
+import { Appstate } from "../App";
+import { useNavigate } from "react-router-dom";
+
 
 const AddMovie = () => {
+  const useAppstate = useContext(Appstate);
+  const navigate = useNavigate();
+
   // here we set our schema, which we pass after submit button into firestore
   const [form, setForm] = useState({
     title: "",
@@ -21,22 +27,29 @@ const AddMovie = () => {
   const addMovie = async () => {
     setLoading(true); //show loading
     try {
-      await addDoc(moviesRef, form); // by this method we add movies into firestore
-      //For notification
-      swal({
-        title: "Successfully Added",
-        icon: "success",
-        buttons: false,
-        timer: 3000,
-      });
-
-      //After adding movie make the form empty
-      setForm({
-        title: "",
-        year: "",
-        description: "",
-        image: "",
-      })
+      if(useAppstate.login)
+      {
+        await addDoc(moviesRef, form); // by this method we add movies into firestore
+        //For notification
+        swal({
+          title: "Successfully Added",
+          icon: "success",
+          buttons: false,
+          timer: 3000,
+        });
+  
+        //After adding movie make the form empty
+        setForm({
+          title: "",
+          year: "",
+          description: "",
+          image: "",
+        })
+      }
+      else
+      {
+        navigate('/login')
+      }
     } catch (err) {
       swal({
         title: err.message,

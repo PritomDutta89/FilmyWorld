@@ -1,6 +1,6 @@
 import { getDocs } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
-import {ThreeDots } from "react-loader-spinner";
+import { ThreeDots } from "react-loader-spinner";
 import ReactStars from "react-stars";
 import { moviesRef } from "../firebase/firebase";
 import { Link } from "react-router-dom";
@@ -13,6 +13,7 @@ const Cards = () => {
   useEffect(() => {
     async function getData() {
       setLoading(true);
+      setData([]); //empty previous state
       const _data = await getDocs(moviesRef); //fetching all data from firestore collection like GET method
       console.log("data:", _data);
       _data.forEach((doc) => {
@@ -39,12 +40,15 @@ const Cards = () => {
                 className="card font-medium shadow-lg p-2 hover:-translate-y-3 cursor-pointer mt-6 transition-all duration-500"
               >
                 <img className="h-60 md:h-72 w-30" src={element.image} />
-                <h1>
-                  <span className="text-gray-500">Name:</span> {element.title}
-                </h1>
+                <h1>{element.title}</h1>
                 <h1 className="flex items-center">
                   <span className="text-gray-500 mr-1">Rating:</span>
-                  <ReactStars size={20} half={true} value={element.rating/element.rated} edit={false} />
+                  <ReactStars
+                    size={20}
+                    half={true}
+                    value={element.rating / element.rated}
+                    edit={false}
+                  />
                 </h1>
                 <h1>
                   <span className="text-gray-500">Year:</span> {element.year}

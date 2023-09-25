@@ -1,14 +1,65 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
+import { query, where, getDocs } from "firebase/firestore";
+import { usersRef } from "../firebase/firebase";
+import bcrypt from 'bcryptjs';
+import { Appstate } from "../App";
+
 
 const Login = () => {
+  const navigate = useNavigate();
+  const useAppstate = useContext(Appstate);
+
   const [form,setForm] = useState({
      mobile: "",
      password: ""
   });
 
   const [loading, setLoading] = useState(false);
+
+  const login = async () => {
+    setLoading(true);
+    try {
+      const quer = query(usersRef, where('mobile', '==', form.mobile));
+      const querySnapShot = await getDocs(quer);
+
+      querySnapShot.forEach((item) => {
+        const _data = item.data();
+        const isUser = bcrypt.compare(form.password, _data.password); //here form-password compare with DB-password
+        if(isUser)
+        {
+          useAppstate.setLogin(true);
+          useAppstate.setUserName(_data.name);
+          swal({
+            title: "Logged In", 
+            icon: "success",
+            buttons: false,
+            timer: 3000,
+          });
+          navigate('/');
+        }
+        else
+        {
+          swal({
+            title: "Invalid Credentials", 
+            icon: "error",
+            buttons: false,
+            timer: 3000,
+          });
+        }
+      });
+    } catch (error) {
+      swal({
+        title: error.message, 
+        icon: "error",
+        buttons: false,
+        timer: 3000,
+      });
+    }
+    setLoading(false);
+  }
 
   return (
     <div className="w-full flex flex-col items-center mt-8">
@@ -48,6 +99,7 @@ const Login = () => {
 
       <div class="p-2 w-full">
         <button
+          onClick={login}
           class="flex mx-auto text-white bg-green-600 border-0 py-2 px-8 focus:outline-none hover:bg-green-700 rounded text-lg"
         >
           {loading ? <TailSpin height={25} color="white" /> : "Login"}
